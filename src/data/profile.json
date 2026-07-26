@@ -1,0 +1,7 @@
+{
+    "superadmin": {
+        "email": "superadmin@fleet-flux.com",
+        "password": "superadmin",
+        "realm": "fleet-flux-admin"
+    }
+}

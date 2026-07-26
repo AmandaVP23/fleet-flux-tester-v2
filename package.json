@@ -1,0 +1,17 @@
+{
+    "name": "fleet-flux-tester-v2",
+    "module": "index.ts",
+    "type": "module",
+    "private": true,
+    "devDependencies": {
+        "@biomejs/biome": "2.5.5",
+        "@types/bun": "latest"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    },
+    "dependencies": {
+        "chalk": "^6.0.0",
+        "commander": "^15.0.0"
+    }
+}
