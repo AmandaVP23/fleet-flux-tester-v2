@@ -15,6 +15,7 @@ export function registerAuthCommander(program: Command) {
             'user profile (get from data/profile.json)',
             'superadmin',
         )
+        // todo allow username/password/realm ?
         .action((options) => {
             console.log('options', options);
             login(options.profile.trim());
