@@ -14,11 +14,8 @@ export async function login(profile: string) {
     }
 
     const loginInformation = profileData[profile as keyof typeof profileData];
-    console.log(loginInformation);
 
     const auth = new AuthService();
 
-    await auth.login();
-
-    console.log('Successfully logged in!');
+    await auth.login(loginInformation);
 }

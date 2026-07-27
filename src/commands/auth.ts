@@ -1,4 +1,6 @@
+import chalk from 'chalk';
 import type { Command } from 'commander';
+import { AuthService } from '../auth/authService';
 import { login } from '../auth/login';
 
 export function registerAuthCommander(program: Command) {
@@ -17,8 +19,19 @@ export function registerAuthCommander(program: Command) {
         )
         // todo allow username/password/realm ?
         .action((options) => {
-            console.log('options', options);
             login(options.profile.trim());
+        });
+
+    program
+        .command('auth:logout')
+        .summary('Logout')
+        .description('End session for current user if exists')
+        .action(async () => {
+            const authService = new AuthService();
+
+            await authService.logout();
+
+            console.log(chalk.green('Success logout'));
         });
 
     return program;

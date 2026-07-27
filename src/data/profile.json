@@ -3,5 +3,10 @@
         "email": "superadmin@fleet-flux.com",
         "password": "superadmin",
         "realm": "fleet-flux-admin"
+    },
+    "friends_admin": {
+        "email": "cb@friends.com",
+        "password": "cb",
+        "realm": "friends"
     }
 }
