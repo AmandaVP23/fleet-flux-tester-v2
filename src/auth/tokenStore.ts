@@ -22,26 +22,23 @@ export class TokenStore {
             },
         };
 
-        fs.writeFile(filePath, JSON.stringify(information), 'utf-8', (err) => {
-            if (err) {
-                console.log(chalk.red('ERROR saving auth information in file'));
-                console.log(err);
-                return;
-            }
-
+        try {
+            fs.writeFileSync(filePath, JSON.stringify(information), 'utf-8');
             console.log('Auth information saved in file successfully');
-        });
+        } catch (err) {
+            console.log(chalk.red('ERROR saving auth information in file'));
+            console.log(err);
+            return;
+        }
     }
 
     load(): AuthSavedInformation | null {
         let data: AuthSavedInformation | null = null;
-        fs.readFile(filePath, 'utf-8', (err, fileData) => {
-            if (err) {
-                return;
-            }
+        try {
+            const fileData = fs.readFileSync(filePath, 'utf-8');
 
             data = JSON.parse(fileData) as AuthSavedInformation;
-        });
+        } catch {}
 
         return data;
     }

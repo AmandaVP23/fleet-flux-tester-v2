@@ -4,8 +4,6 @@ import { AuthService } from '../auth/authService';
 import { login } from '../auth/login';
 
 export function registerAuthCommander(program: Command) {
-    program.name('seeder').description('CLI to help test the FleetFlux API.');
-
     program
         .command('auth:login')
         .summary('Login')

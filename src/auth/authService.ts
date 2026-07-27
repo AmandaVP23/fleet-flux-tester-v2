@@ -15,8 +15,10 @@ export class AuthService {
         this.tokenStore = new TokenStore();
     }
 
-    async getAccessToken() {
+    getAccessToken() {
         const authInformation = this.getAuthInformation();
+
+        console.log('this.getAccessToken', authInformation);
 
         return authInformation ? authInformation.tokens.accessToken : null;
     }
@@ -81,5 +83,9 @@ export class AuthService {
         }
 
         this.tokenStore.clear();
+    }
+
+    async refresh() {
+        await this.keycloak.refresh();
     }
 }
