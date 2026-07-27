@@ -1,7 +1,8 @@
 import chalk from 'chalk';
-import profileData from '../../data/profile.json';
+import profileData from '../data/profile.json';
+import { AuthService } from './authService';
 
-export function login(profile: string) {
+export async function login(profile: string) {
     if (!(profile in profileData)) {
         console.log(chalk.red(`Error! Unknown profile ${profile}`));
         console.log();
@@ -14,4 +15,10 @@ export function login(profile: string) {
 
     const loginInformation = profileData[profile as keyof typeof profileData];
     console.log(loginInformation);
+
+    const auth = new AuthService();
+
+    await auth.login();
+
+    console.log('Successfully logged in!');
 }

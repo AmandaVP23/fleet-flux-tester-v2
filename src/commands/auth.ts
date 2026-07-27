@@ -1,5 +1,5 @@
 import type { Command } from 'commander';
-import { login } from './login';
+import { login } from '../auth/login';
 
 export function registerAuthCommander(program: Command) {
     program.name('seeder').description('CLI to help test the FleetFlux API.');
