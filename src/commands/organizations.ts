@@ -18,7 +18,6 @@ export function registerOrganizationsCommander(program: Command) {
         .option('-s, --size <number>', 'Pagination page size value ')
         .option('--sb, --sortBy <string>', 'Sort by value')
         .action((options) => {
-            console.log('inside command');
             const globalOptions = program.opts();
             organizationHandler.list(globalOptions.profile, {
                 page: options.page ? Number(options.page) : null,

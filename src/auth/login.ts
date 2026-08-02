@@ -1,11 +1,9 @@
 import chalk from 'chalk';
 import profileData from '../data/profile.json';
-import { AuthService } from './authService';
 
-// merge this with AuthService.login?
-export async function login(profile: string) {
-    if (!(profile in profileData)) {
-        console.log(chalk.red(`Error! Unknown profile ${profile}`));
+export function getInformationFromProfileKey(profileKey: string) {
+    if (!(profileKey in profileData)) {
+        console.log(chalk.red(`Error! Unknown profile ${profileKey}`));
         console.log();
         console.log(chalk.bold('Available profiles:'));
         Object.keys(profileData).forEach((profileKey) => {
@@ -14,11 +12,9 @@ export async function login(profile: string) {
         process.exit();
     }
 
-    const loginInformation = profileData[profile as keyof typeof profileData];
-
-    const auth = new AuthService();
-
-    await auth.login(loginInformation);
+    const loginInformation =
+        profileData[profileKey as keyof typeof profileData];
+    return loginInformation;
 }
 
 export function getInfoFromProfile(profile: string) {

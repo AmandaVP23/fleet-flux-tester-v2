@@ -2,6 +2,7 @@ export interface LoginProfileInformation {
     email: string;
     password: string;
     realm: string;
+    profileKey: string;
 }
 
 export interface AuthTokens {

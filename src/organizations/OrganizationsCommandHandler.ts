@@ -1,7 +1,5 @@
-import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { AuthService } from '../auth/authService';
-import { getInfoFromProfile, login } from '../auth/login';
 import { API_URL } from '../settings';
 import { buildUrl } from '../utils/buildUrl';
 import type { OrganizationListParameters } from './types';
@@ -15,30 +13,19 @@ export class OrganizationsCommandHandler {
         this.authService = new AuthService();
     }
 
-    async list(authProfile: string, parameters: OrganizationListParameters) {
-        // todo crete BaseHaandler and have this
-        const authSaved = this.authService.getAuthInformation();
-        console.log('saved', authSaved);
-        if (
-            authSaved?.profileInformation.email !==
-            getInfoFromProfile(authProfile)?.email
-        ) {
-            await login(authProfile);
-        } else {
-            await this.authService.refresh();
-        }
+    async list(profileKey: string, parameters: OrganizationListParameters) {
+        // todo crete BaseHandler and have this
+        await this.authService.authenticate(profileKey);
 
         const url = this.constructListUrl(parameters);
-        console.log(url);
 
         try {
             const { data } = await axios.get(url);
 
             console.log(data);
         } catch (err) {
-            console.log((err as AxiosError).request.headers);
+            // console.log((err as AxiosError).request.headers);
         }
-        // axiosInstance.get(``);
     }
 
     private constructListUrl(parameters: OrganizationListParameters) {

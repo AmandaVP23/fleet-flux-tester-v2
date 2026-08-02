@@ -47,6 +47,8 @@ export class KeycloakClient {
             throw new Error('There is no saved information to refresh');
         }
 
+        console.log('refresh A');
+
         const res = await fetch(
             `${KEYCLOAK_URL}/realms/${authSaved.profileInformation.realm}/protocol/openid-connect/token`,
             {
@@ -61,11 +63,18 @@ export class KeycloakClient {
             },
         );
 
+        console.log('refresh B');
+        console.log(res);
+
         if (!res.ok) {
-            await this.logout(
-                authSaved.profileInformation.realm,
-                authSaved.tokens.refreshToken,
-            );
+            try {
+                await this.logout(
+                    authSaved.profileInformation.realm,
+                    authSaved.tokens.refreshToken,
+                );
+            } catch {
+                console.log('refresh 1');
+            }
             throw new Error('Failed to refresh token - keycloak client');
         }
 
