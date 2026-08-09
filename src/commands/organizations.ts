@@ -28,6 +28,15 @@ export function registerOrganizationsCommander(program: Command) {
             });
         });
 
+    program
+        .command('organizations:create')
+        .summary('Create new organization')
+        .description('Create organizations from organizationCreate.json')
+        .action(() => {
+            const globalOptions = program.opts();
+            organizationHandler.create(globalOptions.profile);
+        });
+
     return program;
 }
 

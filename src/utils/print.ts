@@ -15,6 +15,7 @@ export function printPaginatedList<T extends Record<string, unknown>>(
     console.log(`${chalk.bold('Total: ')} ${paginatedRes.total}`);
     console.log(`${chalk.bold('Page: ')} ${paginatedRes.page}`);
     console.log(`${chalk.bold('Size: ')} ${paginatedRes.size}`);
+    console.log('');
 
     printObjList(paginatedRes.items);
 }
@@ -28,8 +29,6 @@ export function printObjList<T extends Record<string, unknown>>(
         console.log(chalk.green.bold(title));
         console.log('');
     }
-
-    console.log('');
 
     for (let i = 0; i < list.length; i++) {
         const obj = list[i];
