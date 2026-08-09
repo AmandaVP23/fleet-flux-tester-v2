@@ -1,8 +1,11 @@
-import axios from 'axios';
+import axios, { type AxiosError } from 'axios';
+import chalk from 'chalk';
 import { AuthService } from '../auth/authService';
 import { API_URL } from '../settings';
 import { buildUrl } from '../utils/buildUrl';
-import type { OrganizationListParameters } from './types';
+import { printPaginatedList } from '../utils/print';
+import type { PaginatedListResponse } from '../utils/types';
+import type { OrganizationDTO, OrganizationListParameters } from './types';
 
 const basePath = `${API_URL}/organizations`;
 
@@ -14,17 +17,20 @@ export class OrganizationsCommandHandler {
     }
 
     async list(profileKey: string, parameters: OrganizationListParameters) {
-        // todo crete BaseHandler and have this
         await this.authService.authenticate(profileKey);
 
         const url = this.constructListUrl(parameters);
 
         try {
-            const { data } = await axios.get(url);
+            const { data } =
+                await axios.get<PaginatedListResponse<OrganizationDTO>>(url);
 
-            console.log(data);
+            printPaginatedList(data, 'Organizations Response');
         } catch (err) {
-            // console.log((err as AxiosError).request.headers);
+            console.log(
+                chalk.red('Request to get organizations list failed'),
+                (err as AxiosError).response,
+            );
         }
     }
 

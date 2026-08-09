@@ -16,7 +16,9 @@ export class TokenStore {
         const information: AuthSavedInformation = {
             profileInformation: loginInformation,
             tokens: {
-                expiresAt: Date.now() + keycloakTokens.expires_in * 1000,
+                refreshExpiresAt:
+                    Date.now() + keycloakTokens.refresh_expires_in * 1000,
+                tokenExpiresAt: Date.now() + keycloakTokens.expires_in * 1000,
                 refreshToken: keycloakTokens.refresh_token,
                 accessToken: keycloakTokens.access_token,
             },
@@ -24,7 +26,6 @@ export class TokenStore {
 
         try {
             fs.writeFileSync(filePath, JSON.stringify(information), 'utf-8');
-            console.log('Auth information saved in file successfully');
         } catch (err) {
             console.log(chalk.red('ERROR saving auth information in file'));
             console.log(err);

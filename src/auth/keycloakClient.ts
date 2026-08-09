@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { KEYCLOAK_URL } from '../settings';
 import { TokenStore } from './tokenStore';
 import type { KeycloakTokensResponse, LoginProfileInformation } from './types';
@@ -47,40 +48,28 @@ export class KeycloakClient {
             throw new Error('There is no saved information to refresh');
         }
 
-        console.log('refresh A');
-
-        const res = await fetch(
-            `${KEYCLOAK_URL}/realms/${authSaved.profileInformation.realm}/protocol/openid-connect/token`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    grant_type: 'authorization_code',
-                    client_id: 'web',
-                }),
-            },
-        );
-
-        console.log('refresh B');
-        console.log(res);
-
-        if (!res.ok) {
-            try {
-                await this.logout(
-                    authSaved.profileInformation.realm,
-                    authSaved.tokens.refreshToken,
+        try {
+            const { data: tokenResponse } =
+                await axios.post<KeycloakTokensResponse>(
+                    `${KEYCLOAK_URL}/realms/${authSaved.profileInformation.realm}/protocol/openid-connect/token`,
+                    new URLSearchParams({
+                        grant_type: 'refresh_token',
+                        client_id: 'web',
+                        refresh_token: authSaved.tokens.refreshToken,
+                    }),
+                    {
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                    },
                 );
-            } catch {
-                console.log('refresh 1');
-            }
+
+            this.tokenStore.save(authSaved.profileInformation, tokenResponse);
+
+            return tokenResponse;
+        } catch {
             throw new Error('Failed to refresh token - keycloak client');
         }
-
-        const tokens = await res.json();
-
-        return tokens as KeycloakTokensResponse;
     }
 
     async logout(realm: string, refreshToken: string) {

@@ -5,15 +5,16 @@ export interface LoginProfileInformation {
     profileKey: string;
 }
 
-export interface AuthTokens {
-    expiresAt: number;
+export interface AuthTokensStored {
+    refreshExpiresAt: number;
+    tokenExpiresAt: number;
     refreshToken: string;
     accessToken: string;
 }
 
 export interface AuthSavedInformation {
     profileInformation: LoginProfileInformation;
-    tokens: AuthTokens;
+    tokens: AuthTokensStored;
 }
 
 export interface KeycloakTokensResponse {

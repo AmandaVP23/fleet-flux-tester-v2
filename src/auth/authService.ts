@@ -4,7 +4,11 @@ import { KeycloakClient } from './keycloakClient';
 import { waitForAuthorizationCode } from './localServer';
 import { getInformationFromProfileKey } from './login';
 import { TokenStore } from './tokenStore';
-import type { AuthSavedInformation, LoginProfileInformation } from './types';
+import type {
+    AuthSavedInformation,
+    AuthTokensStored,
+    LoginProfileInformation,
+} from './types';
 import { generateLoginUrl, generatePKCE } from './utils';
 
 export class AuthService {
@@ -35,6 +39,11 @@ export class AuthService {
     }
 
     async authenticate(profileKey: string) {
+        if (!this.savedFileInformation) {
+            await this.login(profileKey);
+            return;
+        }
+
         if (
             profileKey !==
             this.savedFileInformation?.profileInformation.profileKey
@@ -44,11 +53,17 @@ export class AuthService {
             return;
         }
 
-        try {
-            const data = await this.keycloak.refresh();
+        if (!this.isAccessTokenExpired(this.savedFileInformation.tokens)) {
+            return;
+        }
 
-            console.log(data);
+        try {
+            await this.keycloak.refresh();
         } catch {
+            await this.keycloak.logout(
+                this.savedFileInformation.profileInformation.realm,
+                this.savedFileInformation.tokens.refreshToken,
+            );
             await this.login(profileKey);
         }
     }
@@ -81,11 +96,6 @@ export class AuthService {
             );
 
             await this.tokenStore.save(loginInfo, tokens);
-
-            console.log(
-                chalk.bold.green(`Access token for ${profileInfo.email}`),
-            );
-            console.log(tokens.access_token);
         } catch {}
     }
 
@@ -98,5 +108,9 @@ export class AuthService {
         }
 
         this.tokenStore.clear();
+    }
+
+    private isAccessTokenExpired(tokensStored: AuthTokensStored) {
+        return new Date() > new Date(tokensStored.tokenExpiresAt);
     }
 }
