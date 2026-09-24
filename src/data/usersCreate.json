@@ -1,0 +1,14 @@
+[
+    {
+        "firstName": "Joey",
+        "lastName": "Tribiani",
+        "email": "joey@example.com",
+        "role": "DRIVER"
+    },
+    {
+        "firstName": "Monica",
+        "lastName": "Geller",
+        "email": "monica@example.com",
+        "role": "FLEET_MANAGER"
+    }
+]

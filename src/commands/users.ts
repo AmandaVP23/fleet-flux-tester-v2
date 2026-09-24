@@ -1,40 +1,40 @@
 import type { Command } from 'commander';
-import { OrganizationsCommandHandler } from '../organizations/OrganizationsCommandHandler';
+import { UsersCommandHandler } from '../users/UsersCommandHandler';
 
-const organizationHandler = new OrganizationsCommandHandler();
+const usersHandler = new UsersCommandHandler();
 
-export function registerOrganizationsCommander(program: Command) {
+export function registerUsersCommander(program: Command) {
     program
-        .command('organizations:list')
-        .summary('List organizations')
-        .description('List organizations paginated')
-        .description('ONLY SUPERADMIN')
+        .command('users:list')
+        .summary('List users')
+        .description('List users paginated')
+        .description('SuperAdmin can filter by organizationId.')
         .option(
             '-d, --direction <asc|desc>',
             'results sort direction asc or desc - default: asc',
         )
-        .option('-f, --filter <ACTIVE|DELETED|ALL>', 'Filter results by status')
+        .option('-o, --organizationId <number>', 'Filter results by organization (Only SUPERADMIN)')
         .option('-p, --page <number>', 'Pagination page value (starts at 0)')
         .option('-s, --size <number>', 'Pagination page size value ')
         .option('--sb, --sortBy <string>', 'Sort by value')
         .action((options) => {
             const globalOptions = program.opts();
-            organizationHandler.list(globalOptions.profile, {
+            usersHandler.list(globalOptions.profile, {
                 page: options.page ? Number(options.page) : null,
                 size: options.size ? Number(options.size) : null,
                 sortBy: options.sortBy || null,
                 direction: options.direction || null,
-                filter: options.filter || null,
+                organizationId: options.organizationId || null,
             });
         });
 
     program
-        .command('organizations:create')
-        .summary('Create new organization')
-        .description('Create organizations from organizationCreate.json')
+        .command('users:create')
+        .summary('Create new user')
+        .description('Create users from usersCreate.json')
         .action(() => {
             const globalOptions = program.opts();
-            organizationHandler.create(globalOptions.profile);
+            usersHandler.create(globalOptions.profile);
         });
 
     return program;

@@ -53,21 +53,15 @@ async function generateValue(objKey: string, objValue: string) {
 export async function constructPayloadObj(
     obj: Record<string, string | number>,
 ) {
-    const entries = await Promise.all(
-        Object.entries(obj).map(async ([key, value]) => {
-            let v = value;
+    const entries: Record<string, string | number | null> = {};
+    for (const [key, value] of Object.entries(obj)) {
+        let v = value;
+        if (v === ':prompt' || String(v).startsWith('random:')) {
+            v = await generateValue(key, String(v));
+        }
 
-            if (v === ':prompt' || String(v).startsWith('random:')) {
-                v = await generateValue(key, String(v));
-            }
+        entries[key] = v;
+    }
 
-            return [key, v] as const;
-        }),
-    );
-
-    return Object.fromEntries(entries);
+    return entries;
 }
-
-// for (const key of Object.keys(obj)) {
-//   await generateValue(...);
-// }

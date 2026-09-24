@@ -3,6 +3,7 @@
 import { Command } from 'commander';
 import { registerAuthCommander } from './src/commands/auth';
 import { registerOrganizationsCommander } from './src/commands/organizations';
+import { registerUsersCommander } from './src/commands/users';
 import { setupAxiosInterceptor } from './src/utils/axiosInstance';
 
 setupAxiosInterceptor();
@@ -24,5 +25,6 @@ program.configureHelp({
 
 registerAuthCommander(program);
 registerOrganizationsCommander(program);
+registerUsersCommander(program);
 
 program.parse();

@@ -5,8 +5,13 @@
         "realm": "fleet-flux-admin"
     },
     "friends_admin": {
-        "email": "cb@friends.com",
+        "email": "cb@example.com",
         "password": "cb",
+        "realm": "friends"
+    },
+    "friends_fleet-manager": {
+        "email": "monica@example.com",
+        "password": "monica",
         "realm": "friends"
     }
 }

@@ -1,36 +1,38 @@
 import axios, { type AxiosError } from 'axios';
 import chalk from 'chalk';
 import { AuthService } from '../auth/authService';
-import organizationsCreate from '../data/organizationCreate.json';
+import usersCreate from '../data/usersCreate.json';
 import { API_URL } from '../settings';
 import { buildUrl } from '../utils/buildUrl';
 import { constructPayloadObj } from '../utils/constructPayloadObj';
 import { printPaginatedList } from '../utils/print';
 import type { PaginatedListResponse } from '../utils/types';
-import type { OrganizationDTO, OrganizationListParameters } from './types';
+import type { UserDTO, UsersListParameter } from './types';
 
-const basePath = `${API_URL}/organizations`;
+const basePath = `${API_URL}/users`;
 
-export class OrganizationsCommandHandler {
+export class UsersCommandHandler {
     private readonly authService: AuthService;
 
     constructor() {
         this.authService = new AuthService();
     }
 
-    async list(profileKey: string, parameters: OrganizationListParameters) {
+    async list(profileKey: string, parameters: UsersListParameter) {
         await this.authService.authenticate(profileKey);
 
-        const url = this.constructListUrl(parameters);
+        const url = buildUrl(basePath, { ...parameters });
 
         try {
             const { data } =
-                await axios.get<PaginatedListResponse<OrganizationDTO>>(url);
+                await axios.get<PaginatedListResponse<UserDTO>>(url);
 
-            printPaginatedList(data, 'Organizations Response');
+            console.log(data);
+
+            printPaginatedList(data, 'Users Response');
         } catch (err) {
             console.log(
-                chalk.red('Request to get organizations list failed'),
+                chalk.red('Request to get users list failed'),
                 (err as AxiosError).response,
             );
         }
@@ -39,20 +41,19 @@ export class OrganizationsCommandHandler {
     async create(profileKey: string) {
         await this.authService.authenticate(profileKey);
 
-        const organizationsPayloads = [];
-
-        chalk.blue.bold('--> Creat organizations')
+        chalk.blue.bold('--> Create users');
         chalk.blue('Authenticated with profile: ', profileKey);
-        chalk.blue('Organizations to create: ', organizationsCreate.length);
+        chalk.blue('Users to create: ', usersCreate.length);
 
-        for (const orgJsonObj of organizationsCreate) {
-            const payload = await constructPayloadObj(orgJsonObj);
-            organizationsPayloads.push(payload);
+        const usersPayloads = [];
+        for (const userJsonObj of usersCreate) {
+            const payload = await constructPayloadObj(userJsonObj);
+            usersPayloads.push(payload);
         }
 
         try {
             const results = await Promise.allSettled(
-                organizationsPayloads.map((payload) => {
+                usersPayloads.map((payload) => {
                     return axios.post(basePath, payload);
                 }),
             );
@@ -60,7 +61,7 @@ export class OrganizationsCommandHandler {
             console.log('');
             console.log(chalk.green('Results:'));
 
-            for (let i = 0; i < organizationsPayloads.length; i++) {
+            for (let i = 0; i < usersPayloads.length; i++) {
                 const result = results[i];
                 console.log(`${i + 1}: ${results[i]?.status}`);
                 if (result?.status === 'rejected') {
@@ -68,11 +69,5 @@ export class OrganizationsCommandHandler {
                 }
             }
         } catch {}
-    }
-
-    private constructListUrl(parameters: OrganizationListParameters) {
-        const url = buildUrl(basePath, { ...parameters });
-
-        return url;
     }
 }

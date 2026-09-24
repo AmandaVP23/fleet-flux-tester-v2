@@ -1,10 +1,6 @@
 import chalk from 'chalk';
 import type { PaginatedListResponse } from './types';
 
-function keys<T extends object>(obj: T) {
-    return Object.keys(obj) as Array<keyof T>;
-}
-
 export function printPaginatedList<T extends Record<string, unknown>>(
     paginatedRes: PaginatedListResponse<T>,
     title: string,
@@ -18,6 +14,23 @@ export function printPaginatedList<T extends Record<string, unknown>>(
     console.log('');
 
     printObjList(paginatedRes.items);
+}
+
+export function printObj<T extends Record<string, unknown>>(
+    obj: T,
+    level = 0,
+) {
+    const objKeys = Object.keys(obj);
+
+    objKeys.forEach((key) => {
+        if (obj[key] !== null && typeof obj[key] === 'object') {
+            console.log(`${chalk.bold(key)}:`);
+            printObj({ ...obj[key] }, level + 1);
+        } else {
+            const spaces = ' '.repeat(level * 4);
+            console.log(`${spaces}${chalk.bold(key)}: ${obj[key]}`);
+        }
+    });
 }
 
 export function printObjList<T extends Record<string, unknown>>(
@@ -36,11 +49,7 @@ export function printObjList<T extends Record<string, unknown>>(
             return;
         }
 
-        const objKeys = Object.keys(obj);
-
-        objKeys.forEach((key) => {
-            console.log(`${chalk.bold(key)}: ${obj[key]}`);
-        });
+        printObj(obj);
 
         if (i < list.length - 1) {
             console.log('--------------');

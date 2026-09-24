@@ -1,12 +1,14 @@
 [
     {
-        "name": ":prompt",
-        "adminFirstName": "random:firstName",
-        "adminLastName": "random:lastName",
-        "adminEmail": "random:email"
+        "name": "Friends",
+        "hostname": "friends",
+        "adminFirstName": "Chandler",
+        "adminLastName": "Bing",
+        "adminEmail": "cb@example.com"
     },
     {
         "name": ":prompt",
+        "hostname": ":prompt",
         "adminFirstName": "random:firstName",
         "adminLastName": "random:lastName",
         "adminEmail": "random:email"

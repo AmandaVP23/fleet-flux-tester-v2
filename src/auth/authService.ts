@@ -96,6 +96,9 @@ export class AuthService {
             );
 
             await this.tokenStore.save(loginInfo, tokens);
+
+            chalk.blue('AccessToken:');
+            console.log(tokens.access_token);
         } catch {}
     }
 
