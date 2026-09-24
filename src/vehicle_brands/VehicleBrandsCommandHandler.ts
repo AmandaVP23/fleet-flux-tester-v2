@@ -1,38 +1,36 @@
 import axios, { type AxiosError } from 'axios';
 import chalk from 'chalk';
 import { AuthService } from '../auth/authService';
-import usersCreate from '../data/usersCreate.json';
+import vehicleBrandsCreate from '../data/vehicleBrandsCreate.json';
 import { API_URL } from '../settings';
 import { buildUrl } from '../utils/buildUrl';
 import { constructPayloadObj } from '../utils/constructPayloadObj';
-import { printPaginatedList } from '../utils/print';
-import type { PaginatedListResponse } from '../utils/types';
-import type { UserDTO, UsersListParameter } from './types';
+import { printObjList, printPaginatedList } from '../utils/print';
+import type { BaseListParameters, PaginatedListResponse } from '../utils/types';
 
-const basePath = `${API_URL}/users`;
+const basePath = `${API_URL}/vehicle-brands`;
 
-export class UsersCommandHandler {
+export class VehicleBrandsCommandHandler {
     private readonly authService: AuthService;
 
     constructor() {
         this.authService = new AuthService();
     }
 
-    async list(profileKey: string, parameters: UsersListParameter) {
+    async list(profileKey: string, filter: string) {
         await this.authService.authenticate(profileKey);
 
-        const url = buildUrl(basePath, { ...parameters });
+        const url = buildUrl(basePath, { filter });
 
         try {
             const { data } =
-                await axios.get<PaginatedListResponse>(url);
+                await axios.get(url);
 
-            console.log(data);
-
-            printPaginatedList(data, 'Users Response');
+            printObjList(data, 'Vehicle Brands Response');
         } catch (err) {
+            console.log(err);
             console.log(
-                chalk.red('Request to get users list failed'),
+                chalk.red('Request to get vehicle brands failed'),
                 (err as AxiosError).response,
             );
         }
@@ -41,19 +39,19 @@ export class UsersCommandHandler {
     async create(profileKey: string) {
         await this.authService.authenticate(profileKey);
 
-        chalk.blue.bold('--> Create users');
+        chalk.blue.bold('--> Create vehicle brands');
         chalk.blue('Authenticated with profile: ', profileKey);
-        chalk.blue('Users to create: ', usersCreate.length);
+        chalk.blue('Vehicle Brands to create: ', vehicleBrandsCreate.length);
 
-        const usersPayloads = [];
-        for (const userJsonObj of usersCreate) {
+        const brandsPayloads = [];
+        for (const userJsonObj of vehicleBrandsCreate) {
             const payload = await constructPayloadObj(userJsonObj);
-            usersPayloads.push(payload);
+            brandsPayloads.push(payload);
         }
 
         try {
             const results = await Promise.allSettled(
-                usersPayloads.map((payload) => {
+                brandsPayloads.map((payload) => {
                     return axios.post(basePath, payload);
                 }),
             );
@@ -61,7 +59,7 @@ export class UsersCommandHandler {
             console.log('');
             console.log(chalk.green('Results:'));
 
-            for (let i = 0; i < usersPayloads.length; i++) {
+            for (let i = 0; i < brandsPayloads.length; i++) {
                 const result = results[i];
                 console.log(`${i + 1}: ${results[i]?.status}`);
                 if (result?.status === 'rejected') {

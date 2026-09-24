@@ -6,13 +6,12 @@ export interface BaseListParameters {
 }
 
 export interface BaseDTO {
-    [key: string]: string | number;
     id: number;
     createdAt: string;
     updatedAt: string;
 }
 
-export interface PaginatedListResponse<T extends object> {
+export interface PaginatedListResponse<T extends object = Record<string, unknown>,> {
     items: T[];
     total: number;
     page: number;

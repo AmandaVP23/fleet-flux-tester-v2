@@ -43,6 +43,11 @@ export function printObjList<T extends Record<string, unknown>>(
         console.log('');
     }
 
+    if (list.length === 0) {
+        console.log('List is empty');
+        return;
+    }
+
     for (let i = 0; i < list.length; i++) {
         const obj = list[i];
         if (!obj) {

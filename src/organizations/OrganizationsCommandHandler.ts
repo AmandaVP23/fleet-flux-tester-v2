@@ -7,7 +7,7 @@ import { buildUrl } from '../utils/buildUrl';
 import { constructPayloadObj } from '../utils/constructPayloadObj';
 import { printPaginatedList } from '../utils/print';
 import type { PaginatedListResponse } from '../utils/types';
-import type { OrganizationDTO, OrganizationListParameters } from './types';
+import type { OrganizationListParameters } from './types';
 
 const basePath = `${API_URL}/organizations`;
 
@@ -25,7 +25,7 @@ export class OrganizationsCommandHandler {
 
         try {
             const { data } =
-                await axios.get<PaginatedListResponse<OrganizationDTO>>(url);
+                await axios.get<PaginatedListResponse>(url);
 
             printPaginatedList(data, 'Organizations Response');
         } catch (err) {
