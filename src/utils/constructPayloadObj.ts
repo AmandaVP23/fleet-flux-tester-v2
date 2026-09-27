@@ -1,6 +1,6 @@
 import { stdin as input, stdout as output } from 'node:process';
 import { createInterface } from 'node:readline/promises';
-import { faker, fakerEN_GB } from '@faker-js/faker';
+import { fakerEN_GB } from '@faker-js/faker';
 import chalk from 'chalk';
 
 async function promptValue(objKey: string) {

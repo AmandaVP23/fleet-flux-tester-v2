@@ -5,6 +5,7 @@ import { registerAuthCommander } from './src/commands/auth';
 import { registerOrganizationsCommander } from './src/commands/organizations';
 import { registerUsersCommander } from './src/commands/users';
 import { registerVehicleBrandsCommander } from './src/commands/vehicleBrands';
+import { registerVehiclesCommander } from './src/commands/vehicles';
 import { setupAxiosInterceptor } from './src/utils/axiosInstance';
 
 setupAxiosInterceptor();
@@ -28,5 +29,6 @@ registerAuthCommander(program);
 registerOrganizationsCommander(program);
 registerUsersCommander(program);
 registerVehicleBrandsCommander(program);
+registerVehiclesCommander(program);
 
 program.parse();

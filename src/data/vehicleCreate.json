@@ -1,0 +1,20 @@
+[{
+    "organizationId": 1,
+    "brandId": 1,
+    "variant": "",
+    "model": "Sprinter",
+    "plateNumber": "AA-11-AA",
+    "vin": "WVWZZZ1JZXW000001",
+    "yearOfManufacture": 2018,
+    "category": "LIGHT_DUTY",
+    "type": "CAR",
+    "fuelType": "GASOLINE",
+    "fuelCapacityInLiters": 75,
+    "avgConsumptionPer100Km": 7.5,
+    "lastServiceDate": "2026-05-27T11:18:20.055Z",
+    "insurancePolicyNumber": "ABC12345",
+    "insuranceExpiryDate": "2026-11-29T11:18:20.055Z",
+    "inspectionDueDate": "2027-01-29T11:18:20.055Z",
+    "ownershipType": "OWNED",
+    "status": "ACTIVE"
+}]
