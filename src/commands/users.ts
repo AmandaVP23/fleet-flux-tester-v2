@@ -15,7 +15,8 @@ export function registerUsersCommander(program: Command) {
         )
         .option('-o, --organizationId <number>', 'Filter results by organization (Only SUPERADMIN)')
         .option('-p, --page <number>', 'Pagination page value (starts at 0)')
-        .option('-s, --size <number>', 'Pagination page size value ')
+        .option('-s, --size <number>', 'Pagination page size value')
+        .option('-r, --role <string>', 'User role')
         .option('--sb, --sortBy <string>', 'Sort by value')
         .action((options) => {
             const globalOptions = program.opts();
@@ -25,6 +26,7 @@ export function registerUsersCommander(program: Command) {
                 sortBy: options.sortBy || null,
                 direction: options.direction || null,
                 organizationId: options.organizationId || null,
+                role: options.role || null,
             });
         });
 

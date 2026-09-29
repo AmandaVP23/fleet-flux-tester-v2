@@ -27,8 +27,6 @@ export class UsersCommandHandler {
             const { data } =
                 await axios.get<PaginatedListResponse>(url);
 
-            console.log(data);
-
             printPaginatedList(data, 'Users Response');
         } catch (err) {
             console.log(
