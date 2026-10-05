@@ -6,6 +6,7 @@ import { registerOrganizationsCommander } from './src/commands/organizations';
 import { registerUsersCommander } from './src/commands/users';
 import { registerVehicleBrandsCommander } from './src/commands/vehicleBrands';
 import { registerVehiclesCommander } from './src/commands/vehicles';
+import { registerVehicleDriverAssingmentsCommander } from './src/commands/vehiclesDriversAssignment';
 import { setupAxiosInterceptor } from './src/utils/axiosInstance';
 
 setupAxiosInterceptor();
@@ -30,5 +31,6 @@ registerOrganizationsCommander(program);
 registerUsersCommander(program);
 registerVehicleBrandsCommander(program);
 registerVehiclesCommander(program);
+registerVehicleDriverAssingmentsCommander(program);
 
 program.parse();

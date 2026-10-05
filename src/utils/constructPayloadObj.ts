@@ -51,7 +51,7 @@ async function generateValue(objKey: string, objValue: string) {
 }
 
 export async function constructPayloadObj(
-    obj: Record<string, string | number>,
+    obj: Record<string, string | number | null>,
 ) {
     const entries: Record<string, string | number | null> = {};
     for (const [key, value] of Object.entries(obj)) {
