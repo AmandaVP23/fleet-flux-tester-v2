@@ -1,0 +1,74 @@
+{
+    "vehicleBrands": [
+        "Seat",
+        "Mercedes",
+        "Fiat",
+        "Opel"
+    ],
+    "data": [{
+        "organization": {
+            "name": "Friends",
+            "hostname": "friends",
+            "adminFirstName": "Chandler",
+            "adminLastName": "Bing",
+            "adminEmail": "cb@example.com"
+        },
+        "users": [
+            {
+                "firstName": "Joey",
+                "lastName": "Tribiani",
+                "email": "joey@example.com",
+                "role": "DRIVER",
+                "organizationId": "ORGANIZATION_ID"
+            }, {
+                "firstName": "Monica",
+                "lastName": "Geller",
+                "email": "monica@example.com",
+                "role": "FLEET_MANAGER",
+                "organizationId": "ORGANIZATION_ID"
+            }
+        ],
+        "vehicles": [
+            {
+                "organizationId": "ORGANIZATION_ID",
+                "brandId": "random:vehicleBrand",
+                "variant": "",
+                "model": "Sprinter",
+                "plateNumber": "CC-22-BB",
+                "vin": "JVWZZZ2JZXW000004",
+                "yearOfManufacture": 2018,
+                "category": "LIGHT_DUTY",
+                "type": "CAR",
+                "fuelType": "GASOLINE",
+                "fuelCapacityInLiters": 75,
+                "avgConsumptionPer100Km": 7.5,
+                "lastServiceDate": "2026-06-28T11:18:20.055Z",
+                "insurancePolicyNumber": "ABC12345",
+                "insuranceExpiryDate": "2026-11-29T11:18:20.055Z",
+                "inspectionDueDate": "2027-01-29T11:18:20.055Z",
+                "ownershipType": "OWNED",
+                "status": "ACTIVE"
+            },
+            {
+                "organizationId": "ORGANIZATION_ID",
+                "brandId": "random:vehicleBrand",
+                "variant": "",
+                "model": "Sprinter",
+                "plateNumber": "AA-11-BB",
+                "vin": "JVWZ1212JZXW000004",
+                "yearOfManufacture": 2018,
+                "category": "LIGHT_DUTY",
+                "type": "CAR",
+                "fuelType": "GASOLINE",
+                "fuelCapacityInLiters": 75,
+                "avgConsumptionPer100Km": 7.5,
+                "lastServiceDate": "2026-06-28T11:18:20.055Z",
+                "insurancePolicyNumber": "ABC12345",
+                "insuranceExpiryDate": "2026-11-29T11:18:20.055Z",
+                "inspectionDueDate": "2027-01-29T11:18:20.055Z",
+                "ownershipType": "OWNED",
+                "status": "ACTIVE"
+            }
+        ]
+    }]
+}

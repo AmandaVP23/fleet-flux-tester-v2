@@ -13,5 +13,10 @@
         "email": "monica@example.com",
         "password": "monica",
         "realm": "friends"
+    },
+    "marvel_admin": {
+        "email": "bp@example.com",
+        "password": "bp",
+        "realm": "marvel"
     }
 }

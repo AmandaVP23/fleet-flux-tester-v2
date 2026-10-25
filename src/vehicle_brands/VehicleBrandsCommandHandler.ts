@@ -2,12 +2,12 @@ import axios, { type AxiosError } from 'axios';
 import chalk from 'chalk';
 import { AuthService } from '../auth/authService';
 import vehicleBrandsCreate from '../data/vehicleBrandsCreate.json';
-import { API_URL } from '../settings';
+import { BaseEndpoints } from '../endpoints';
 import { buildUrl } from '../utils/buildUrl';
 import { constructPayloadObj } from '../utils/constructPayloadObj';
 import { printObjList } from '../utils/print';
 
-const basePath = `${API_URL}/vehicle-brands`;
+const basePath = BaseEndpoints.VehicleBrands;
 
 export class VehicleBrandsCommandHandler {
     private readonly authService: AuthService;
@@ -22,8 +22,7 @@ export class VehicleBrandsCommandHandler {
         const url = buildUrl(basePath, { filter });
 
         try {
-            const { data } =
-                await axios.get(url);
+            const { data } = await axios.get(url);
 
             printObjList(data, 'Vehicle Brands Response');
         } catch (err) {

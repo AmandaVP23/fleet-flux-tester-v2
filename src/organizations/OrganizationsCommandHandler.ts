@@ -2,14 +2,14 @@ import axios, { type AxiosError } from 'axios';
 import chalk from 'chalk';
 import { AuthService } from '../auth/authService';
 import organizationsCreate from '../data/organizationCreate.json';
-import { API_URL } from '../settings';
+import { BaseEndpoints } from '../endpoints';
 import { buildUrl } from '../utils/buildUrl';
 import { constructPayloadObj } from '../utils/constructPayloadObj';
 import { printPaginatedList } from '../utils/print';
 import type { PaginatedListResponse } from '../utils/types';
 import type { OrganizationListParameters } from './types';
 
-const basePath = `${API_URL}/organizations`;
+const basePath = BaseEndpoints.Organizations;
 
 export class OrganizationsCommandHandler {
     private readonly authService: AuthService;
@@ -24,8 +24,7 @@ export class OrganizationsCommandHandler {
         const url = this.constructListUrl(parameters);
 
         try {
-            const { data } =
-                await axios.get<PaginatedListResponse>(url);
+            const { data } = await axios.get<PaginatedListResponse>(url);
 
             printPaginatedList(data, 'Organizations Response');
         } catch (err) {
@@ -41,7 +40,7 @@ export class OrganizationsCommandHandler {
 
         const organizationsPayloads = [];
 
-        chalk.blue.bold('--> Creat organizations')
+        chalk.blue.bold('--> Create organizations');
         chalk.blue('Authenticated with profile: ', profileKey);
         chalk.blue('Organizations to create: ', organizationsCreate.length);
 
@@ -60,11 +59,11 @@ export class OrganizationsCommandHandler {
             console.log('');
             console.log(chalk.green('Results:'));
 
-            for (let i = 0; i < organizationsPayloads.length; i++) {
+            for (let i = 0; i < results.length; i++) {
                 const result = results[i];
-                console.log(`${i + 1}: ${results[i]?.status}`);
+                console.log(`${i + 1}: ${result?.status}`);
                 if (result?.status === 'rejected') {
-                    console.log(result.reason.response.data);
+                    console.log('status: ', result.reason.status);
                 }
             }
         } catch {}

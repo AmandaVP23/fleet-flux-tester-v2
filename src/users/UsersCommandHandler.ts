@@ -2,14 +2,14 @@ import axios, { type AxiosError } from 'axios';
 import chalk from 'chalk';
 import { AuthService } from '../auth/authService';
 import usersCreate from '../data/usersCreate.json';
-import { API_URL } from '../settings';
+import { BaseEndpoints } from '../endpoints';
 import { buildUrl } from '../utils/buildUrl';
 import { constructPayloadObj } from '../utils/constructPayloadObj';
 import { printPaginatedList } from '../utils/print';
 import type { PaginatedListResponse } from '../utils/types';
-import type { UserDTO, UsersListParameter } from './types';
+import type { UsersListParameter } from './types';
 
-const basePath = `${API_URL}/users`;
+const basePath = BaseEndpoints.Users;
 
 export class UsersCommandHandler {
     private readonly authService: AuthService;
@@ -24,8 +24,7 @@ export class UsersCommandHandler {
         const url = buildUrl(basePath, { ...parameters });
 
         try {
-            const { data } =
-                await axios.get<PaginatedListResponse>(url);
+            const { data } = await axios.get<PaginatedListResponse>(url);
 
             printPaginatedList(data, 'Users Response');
         } catch (err) {

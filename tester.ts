@@ -2,6 +2,7 @@
 
 import { Command } from 'commander';
 import { registerAuthCommander } from './src/commands/auth';
+import { registerInitialSeedCommander } from './src/commands/initialSeed';
 import { registerOrganizationsCommander } from './src/commands/organizations';
 import { registerUsersCommander } from './src/commands/users';
 import { registerVehicleBrandsCommander } from './src/commands/vehicleBrands';
@@ -26,6 +27,7 @@ program.configureHelp({
     showGlobalOptions: true,
 });
 
+registerInitialSeedCommander(program);
 registerAuthCommander(program);
 registerOrganizationsCommander(program);
 registerUsersCommander(program);
