@@ -40,6 +40,7 @@ export class AuthService {
 
     async authenticate(profileKey: string) {
         if (!this.savedFileInformation) {
+            console.log('HERE A');
             await this.login(profileKey);
             return;
         }
@@ -48,12 +49,14 @@ export class AuthService {
             profileKey !==
             this.savedFileInformation?.profileInformation.profileKey
         ) {
+            console.log('HERE B');
             await this.logout();
             await this.login(profileKey);
             return;
         }
 
         if (!this.isAccessTokenExpired(this.savedFileInformation.tokens)) {
+            console.log('HERE C');
             return;
         }
 

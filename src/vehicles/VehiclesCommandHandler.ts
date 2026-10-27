@@ -2,13 +2,13 @@ import axios, { type AxiosError } from 'axios';
 import chalk from 'chalk';
 import { AuthService } from '../auth/authService';
 import vehicleCreate from '../data/vehicleCreate.json';
-import { API_URL } from '../settings';
+import { BaseEndpoints } from '../endpoints';
 import { buildUrl } from '../utils/buildUrl';
 import { constructPayloadObj } from '../utils/constructPayloadObj';
 import { printPaginatedList } from '../utils/print';
 import type { BaseListParameters, PaginatedListResponse } from '../utils/types';
 
-const basePath = `${API_URL}/vehicles`;
+const basePath = BaseEndpoints.Vehicles;
 
 interface VehicleListParameters extends BaseListParameters {
     organizationId: number | null;

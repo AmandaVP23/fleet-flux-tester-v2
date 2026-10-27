@@ -1,10 +1,12 @@
-import axios, { AxiosError, isAxiosError } from 'axios';
+import axios, { isAxiosError } from 'axios';
 import chalk from 'chalk';
 import { AuthService } from '../auth/authService';
 import initialDataJson from '../data/initialData.json';
 import { BaseEndpoints } from '../endpoints';
 import type { OrganizationDTO } from '../organizations/types';
 import type { UserDTO } from '../users/types';
+import { buildUrl } from '../utils/buildUrl';
+import type { PaginatedListResponse } from '../utils/types';
 
 const profileKey = 'superadmin';
 
@@ -20,7 +22,7 @@ export class InitialSeedCommandHandler {
     async seed() {
         await this.authService.authenticate(profileKey);
         
-        chalk.blue.bold('########## Initial Seed ##########');
+        console.log(chalk.yellow.bold('########## Initial Seed ##########'));
         
         this.createVehicleBrands();
         
@@ -30,10 +32,11 @@ export class InitialSeedCommandHandler {
             const organization = await this.createOrganization(data.organization);
             
             if (!organization) {
-                chalk.red.bold("Problem creating organization");
+                console.log(chalk.red.bold("Problem creating or getting organization"));
                 return;
             }
-            this.createUsers(organization, data.users);
+            await this.createUsers(organization, data.users);
+            await this.createVehicles(organization, data.vehicles);
         }
     }
 
@@ -42,18 +45,26 @@ export class InitialSeedCommandHandler {
 
         try {
             const { data } = await axios.post<OrganizationDTO>(BaseEndpoints.Organizations, orgData);
-            chalk.green(`Created organization ${data.name} [#${data.id}]`)
+            console.log(chalk.green(`Created organization ${data.name} [#${data.id}]`));
             return data;
         } catch (e) {
-            if (isAxiosError(e) && e.status === 409) {
-                // todo - get existing org 
+            console.log(isAxiosError(e) && e.response?.status)
+            if (isAxiosError(e) && e.response?.status === 409) {
+                try {
+                    console.log('Organization conflict. Trying to get the existing organization');
+                    const { data } = await axios.get<PaginatedListResponse<OrganizationDTO>>(buildUrl(BaseEndpoints.Organizations, { size: 100 }));
+                    const [org] = data.items.filter((o) => o.name.toLocaleLowerCase() === (orgData.name as string).toLocaleLowerCase());
+                    return org || null; 
+                } catch (e) {
+                    console.log(e);
+                }
             }
             return null;
         }
     }
-// todo - remove this any
+
     async createUsers(organization: OrganizationDTO, usersData: object[]) {
-        chalk.green.bold(`---> Creating users for org unit ${organization.name} (#${organization.id})`);
+        console.log(chalk.green.bold(`---> Creating users for org unit ${organization.name} (#${organization.id})`));
         
         const payloads = usersData.map((userData) => ({
             ...userData,
@@ -72,13 +83,13 @@ export class InitialSeedCommandHandler {
                 console.log(result.reason.response.data);
             } else if (result?.status === 'fulfilled') {
                 const createdUser = result.value.data as UserDTO;
-                chalk.green(`User: ${createdUser.firstName} ${createdUser.lastName} created [#${result.value.data.id}]`);
+                console.log(chalk.green(`User: ${createdUser.firstName} ${createdUser.lastName} created [#${createdUser.id}]`));
             }
         }
     }
     
     async createVehicleBrands() {
-        chalk.green.bold('---> Creating vehicle brands');
+        console.log(chalk.green.bold('---> Creating vehicle brands'));
         
         const payloads = initialDataJson.vehicleBrands.map((brandName) => ({
             name: brandName,
@@ -95,9 +106,39 @@ export class InitialSeedCommandHandler {
             if (result?.status === 'rejected') {
                 console.log(result.reason.response.data);
             } else if (result?.status === 'fulfilled') {
-                chalk.green(`Brand: ${payloads[i]?.name} created [#${result.value.data.id}]`);
+                console.log(chalk.green(`Brand: ${payloads[i]?.name} created [#${result.value.data.id}]`));
                 this.vehicleBrandsIds.push(result.value.data.id);
             }
         }
+    }
+
+    async createVehicles(organization: OrganizationDTO, vehiclesData: object[]) {
+        console.log(chalk.green.bold(`---> Creating vehicles for org unit ${organization.name} (#${organization.id})`));
+
+        const payloads = vehiclesData.map((vehicleData) => ({
+            ...vehicleData,
+            organizationId: organization.id,
+            brandId: this.getRandomVehicleBrandId(),
+        }));
+
+        const results = await Promise.allSettled(
+            payloads.map((p) => {
+                return axios.post(BaseEndpoints.Vehicles, p);
+            }),
+        );
+
+        for (let i = 0; i < results.length; i++) {
+            const result = results[i];
+            if (result?.status === 'rejected') {
+                console.log(result.reason.response.data);
+            } else if (result?.status === 'fulfilled') {
+                const createdVehicle = result.value.data as { id: number, plateNumber: string };
+                console.log(chalk.green(`Vehicle created: ${createdVehicle.plateNumber} created [#${createdVehicle.id}]`));
+            }
+        }
+    }
+
+    private getRandomVehicleBrandId() {
+        return this.vehicleBrandsIds[Math.floor(Math.random() * this.vehicleBrandsIds.length)];
     }
 }

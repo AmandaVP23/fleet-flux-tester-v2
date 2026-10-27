@@ -40,9 +40,9 @@ export class OrganizationsCommandHandler {
 
         const organizationsPayloads = [];
 
-        chalk.blue.bold('--> Create organizations');
-        chalk.blue('Authenticated with profile: ', profileKey);
-        chalk.blue('Organizations to create: ', organizationsCreate.length);
+        console.log(chalk.blue.bold('--> Create organizations'));
+        console.log(chalk.blue('Authenticated with profile: ', profileKey));
+        console.log(chalk.blue('Organizations to create: ', organizationsCreate.length));
 
         for (const orgJsonObj of organizationsCreate) {
             const payload = await constructPayloadObj(orgJsonObj);

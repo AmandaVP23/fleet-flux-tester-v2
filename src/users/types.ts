@@ -6,6 +6,7 @@ export interface UsersListParameter extends BaseListParameters {
 }
 
 export interface UserDTO {
+    id: number;
     firstName: string;
     lastName: string;
     email: string;
